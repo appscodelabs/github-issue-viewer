@@ -2,6 +2,15 @@
 
 > A Vue.js project
 
+## Test PWA
+
+1. Build the `dist/` directory:
+  - $ npm run build
+2. Go into `dist/` directory and open index.html file with chrome browser:
+  - cd dist
+  - open index.html
+3. Now, open chrome developer tool (`Cmd + Shift + I`) | `Network` | Check `Offline`. Now reload the page, it should work as Charm!
+
 ## Build Setup
 
 ``` bash
