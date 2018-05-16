@@ -1,18 +1,20 @@
 <template>
   <div id="app">
-    <header>
-      <span>Vue.js PWA</span>
-    </header>
-    <main>
-      <img src="./assets/logo.png" alt="Vue.js PWA">
-      <router-view></router-view>
-    </main>
+    <!-- <img src="./assets/logo.png"> -->
+    <div class="ui container">
+      <my-vuetable></my-vuetable>
+    </div>
   </div>
 </template>
 
 <script>
+import MyVuetable from './components/MyVuetable';
+
 export default {
   name: 'app',
+  components: {
+    MyVuetable,
+  },
 };
 </script>
 
@@ -25,6 +27,7 @@ body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
   color: #2c3e50;
 }
 
