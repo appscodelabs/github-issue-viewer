@@ -7,7 +7,25 @@
     pagination-path=""
     :per-page="10"
     @vuetable:pagination-data="onPaginationData"
-    ></Vuetable>
+    >
+      <template slot="actions" scope="props">
+        <div class="custom-actions">
+          <button class="ui basic button"
+            @click="onAction('view-item', props.rowData, props.rowIndex)">
+            <i class="zoom icon"></i>
+          </button>
+          <button class="ui basic button"
+            @click="onAction('edit-item', props.rowData, props.rowIndex)">
+            <i class="edit icon"></i>
+          </button>
+          <button class="ui basic button"
+            @click="onAction('delete-item', props.rowData, props.rowIndex)">
+            <i class="delete icon"></i>
+          </button>
+        </div>
+      </template>
+    </Vuetable>
+
     <div class="vuetable-pagination ui basic segment grid">
       <vuetable-pagination-info ref="paginationInfo"
       ></vuetable-pagination-info>
@@ -75,6 +93,9 @@ export default {
     },
     onChangePage(page) {
       this.$refs.pagination.changePage(page);
+    },
+    onAction(action, data, index) {
+      console.log(`slot) action: ${action} ${data.name} ${index}`);
     },
   },
 };
