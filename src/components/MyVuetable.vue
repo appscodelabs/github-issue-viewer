@@ -50,6 +50,7 @@ import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePagination
 import VueEvents from 'vue-events';
 import DetailRow from './DetailRow';
 import FilterBar from './FilterBar';
+import FieldDefs from './FieldDefs';
 
 Vue.use(VueEvents);
 Vue.component('my-detail-row', DetailRow);
@@ -63,36 +64,7 @@ export default {
   },
   data() {
     return {
-      fields: [
-        'name', 'email', 'birthdate',
-        {
-          name: 'age',
-          sortField: 'age',
-          titleClass: 'center aligned',
-          dataClass: 'center aligned',
-        },
-        {
-          name: 'salary',
-          sortField: 'salary',
-          titleClass: 'center aligned',
-          dataClass: 'right aligned',
-          callback: 'handleSalary',
-          direction: 'des',
-        },
-        {
-          name: '__component:custom-actions',
-          title: 'Actions',
-          titleClass: 'center aligned',
-          dataClass: 'center aligned',
-        },
-      ],
-      sortOrder: [
-        {
-          field: 'salary',
-          sortField: 'salary',
-          direction: 'asc',
-        },
-      ],
+      fields: FieldDefs,
       moreParams: {},
     };
   },
