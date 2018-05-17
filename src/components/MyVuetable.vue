@@ -6,6 +6,8 @@
     :sort-order="sortOrder"
     pagination-path=""
     :per-page="10"
+    detail-row-component="my-detail-row"
+    @vuetable:cell-clicked="onCellClicked"
     @vuetable:pagination-data="onPaginationData"
     >
       <template slot="actions" scope="props">
@@ -38,10 +40,14 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import Vuetable from 'vuetable-2/src/components/Vuetable';
 import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown';
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
 // import CustomActions from './CustomActions';
+import DetailRow from './DetailRow';
+
+Vue.component('my-detail-row', DetailRow);
 
 export default {
   components: {
@@ -85,7 +91,6 @@ export default {
   },
   methods: {
     handleSalary(value) {
-      console.log('valuuuuu: ', value);
       return `${value} 000`;
     },
     onPaginationData(paginationData) {
@@ -96,6 +101,12 @@ export default {
     },
     onAction(action, data, index) {
       console.log(`slot) action: ${action} ${data.name} ${index}`);
+    },
+    onCellClicked(data, field, event) {
+      console.log('cellClicked: data: ', data);
+      console.log('cellClicked: field: ', field.name);
+      console.log('cellClicked: event: ', event);
+      this.$refs.vuetable.toggleDetailRow(data.id);
     },
   },
 };
