@@ -20,10 +20,12 @@
     },
     methods: {
       doFilter() {
+        this.$events.fire('filter-set', this.filterText);
         console.log('doFilter:', this.filterText);
       },
       resetFilter() {
         this.filterText = '';
+        this.$events.fire('filter-reset');
         console.log('resetFilter');
       },
     },

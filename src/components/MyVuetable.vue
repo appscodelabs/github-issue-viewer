@@ -10,6 +10,7 @@
     detail-row-component="my-detail-row"
     @vuetable:cell-clicked="onCellClicked"
     @vuetable:pagination-data="onPaginationData"
+    :append-params="moreParams"
     >
       <template slot="actions" scope="props">
         <div class="custom-actions">
@@ -46,9 +47,11 @@ import Vuetable from 'vuetable-2/src/components/Vuetable';
 import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown';
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
 // import CustomActions from './CustomActions';
+import VueEvents from 'vue-events';
 import DetailRow from './DetailRow';
 import FilterBar from './FilterBar';
 
+Vue.use(VueEvents);
 Vue.component('my-detail-row', DetailRow);
 Vue.component('filter-bar', FilterBar);
 
@@ -90,7 +93,12 @@ export default {
           direction: 'asc',
         },
       ],
+      moreParams: {},
     };
+  },
+  mounted() {
+    this.$events.$on('filter-set', eventData => this.onFilterSet(eventData));
+    this.$events.$on('filter-reset', e => this.onFilterReset(e));
   },
   methods: {
     handleSalary(value) {
@@ -110,6 +118,18 @@ export default {
       console.log('cellClicked: field: ', field.name);
       console.log('cellClicked: event: ', event);
       this.$refs.vuetable.toggleDetailRow(data.id);
+    },
+    onFilterSet(filterText) {
+      console.log('filter-set: ', filterText);
+      this.moreParams = {
+        filter: filterText,
+      };
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
+    },
+    onFilterReset() {
+      this.moreParams = {};
+      Vue.nextTick(() => this.$refs.vuetable.refresh());
+      console.log('filter-reset: ');
     },
   },
 };
