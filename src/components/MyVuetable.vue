@@ -1,5 +1,6 @@
 <template>
   <div>
+    <filter-bar></filter-bar>
     <Vuetable ref="vuetable"
     api-url="https://vuetable.ratiw.net/api/users"
     :fields="fields"
@@ -46,8 +47,10 @@ import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDrop
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
 // import CustomActions from './CustomActions';
 import DetailRow from './DetailRow';
+import FilterBar from './FilterBar';
 
 Vue.component('my-detail-row', DetailRow);
+Vue.component('filter-bar', FilterBar);
 
 export default {
   components: {
