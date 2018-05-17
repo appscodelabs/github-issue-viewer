@@ -32,12 +32,10 @@
     </Vuetable>
 
     <div class="vuetable-pagination ui basic segment grid">
-      <vuetable-pagination-info ref="paginationInfo"
-      ></vuetable-pagination-info>
-
-      <VuetablePagination ref="pagination"
+      <vuetable-pagination-bootstrap ref="pagination"
+        class="pull-right"
         @vuetable-pagination:change-page="onChangePage"
-      ></VuetablePagination>
+      ></vuetable-pagination-bootstrap>
     </div>
   </div>
 </template>
@@ -45,13 +43,14 @@
 <script>
 import Vue from 'vue';
 import Vuetable from 'vuetable-2/src/components/Vuetable';
-import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown';
+// import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown';
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
 // import CustomActions from './CustomActions';
 import VueEvents from 'vue-events';
 // import DetailRow from './DetailRow';
 import FilterBar from './FilterBar';
 // import FieldDefs from './FieldDefs';
+import VuetablePaginationBootstrap from './VuetablePaginationBootstrap';
 
 Vue.use(VueEvents);
 // Vue.component('my-detail-row', DetailRow);
@@ -61,8 +60,8 @@ export default {
   name: 'my-vuetable',
   components: {
     Vuetable,
-    VuetablePagination,
     VuetablePaginationInfo,
+    VuetablePaginationBootstrap,
   },
   props: {
     apiUrl: {
@@ -103,10 +102,10 @@ export default {
       return `${value} 000`;
     },
     onPaginationData(paginationData) {
-      this.$refs.pagination.setPagination(paginationData);
+      this.$refs.pagination.setPaginationData(paginationData);
     },
     onChangePage(page) {
-      this.$refs.pagination.changePage(page);
+      this.$refs.vuetable.changePage(page);
     },
     onAction(action, data, index) {
       console.log(`slot) action: ${action} ${data.name} ${index}`);
@@ -126,6 +125,23 @@ export default {
       delete this.appendParams.filter;
       Vue.nextTick(() => this.$refs.vuetable.refresh());
       console.log('filter-reset: ');
+    },
+    renderPagination(h) {
+      return h(
+        'div',
+        { class: { 'vuetable-pagination': true } },
+        [
+          h('vuetable-pagination-info', { ref: 'paginationInfo', props: { css: this.css.paginationInfo } }),
+          h('vuetable-pagination-bootstrap', {
+            ref: 'pagination',
+            class: { 'pull-right': true },
+            props: {},
+            on: {
+              'vuetable-pagination:change-page': this.onChangePage,
+            },
+          }),
+        ],
+      );
     },
   },
 };
