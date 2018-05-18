@@ -3,7 +3,6 @@
     <!-- <img src="./assets/logo.png"> -->
     <div class="ui container">
       <my-vuetable
-        apiUrl="https://vuetable.ratiw.net/api/users"
         :fields="fields"
         :sort-order="sortOrder"
         :append-params="moreParams"

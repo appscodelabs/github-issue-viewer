@@ -1,16 +1,31 @@
 export default [
+  /*
   {
     name: '__sequence',
     title: '#',
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },
+ */
+  'id',
+  /*
   {
-    name: '__checkbox',
+    name: 'title',
+    callback: 'handleTitle|url',
+  },
+ */
+  {
+    name: '__slot:titlelink',
+    title: 'Title',
+  },
+  {
+    name: 'created_at',
+    title: 'Created At',
+    sortField: 'created_at',
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },
-  'name', 'email', 'birthdate',
+/*
   {
     name: 'age',
     sortField: 'age',
@@ -31,4 +46,5 @@ export default [
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },
+ */
 ];

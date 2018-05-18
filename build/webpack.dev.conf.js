@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('../config')
@@ -36,6 +37,9 @@ module.exports = merge(baseWebpackConfig, {
       serviceWorkerLoader: `<script>${fs.readFileSync(path.join(__dirname,
         './service-worker-dev.js'), 'utf-8')}</script>`
     }),
-    new FriendlyErrorsPlugin()
+    new FriendlyErrorsPlugin(),
+    new CopyWebpackPlugin([
+      {from: './node_modules/bootstrap/dist/css/bootstrap.min.css', to: './static/css/'}
+    ])
   ]
 })
