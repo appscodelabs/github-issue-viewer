@@ -7,7 +7,6 @@ export default [
     dataClass: 'center aligned',
   },
  */
-  'id',
   /*
   {
     name: 'title',
@@ -19,9 +18,23 @@ export default [
     title: 'Title',
   },
   {
-    name: 'created_at',
+    name: 'orgName',
+    title: 'Organization',
+    sortField: 'orgName',
+    titleClass: 'center aligned',
+    dataClass: 'center aligned',
+  },
+  {
+    name: 'repoName',
+    title: 'Repository',
+    sortField: 'repoName',
+    titleClass: 'center aligned',
+    dataClass: 'center aligned',
+  },
+  {
+    name: 'createdAt',
     title: 'Created At',
-    sortField: 'created_at',
+    sortField: 'createdAt',
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },

@@ -5,6 +5,7 @@ import App from './App';
 import router from './router';
 /* eslint-disable no-unused-vars */
 import CustomActions from './components/CustomActions';
+import store from './store/store';
 
 Vue.config.productionTip = false;
 Vue.component('custom-actions', CustomActions);
@@ -13,6 +14,7 @@ Vue.component('custom-actions', CustomActions);
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App },
 });

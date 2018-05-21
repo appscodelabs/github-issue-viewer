@@ -7,7 +7,7 @@
     data-path="data"
     :fields="fields"
     pagination-path=""
-    :per-page="10"
+    :per-page="20"
     :multi-sort="true"
     :sort-order="sortOrder"
     :append-params="appendParams"
@@ -71,6 +71,9 @@ export default {
     VuetablePaginationInfo,
     VuetablePaginationBootstrap,
   },
+  created() {
+    this.$store.dispatch('getRepoIssues');
+  },
   props: {
     /*
     apiUrl: {
@@ -102,20 +105,25 @@ export default {
     return {
       // fields: FieldDefs,
       orgs: {},
-      issues: [],
       repos: [],
     };
+  },
+  computed: {
+    issues() {
+      return this.$store.getters.getIssues;
+    },
   },
   mounted() {
     this.$events.$on('filter-set', eventData => this.onFilterSet(eventData));
     this.$events.$on('filter-reset', e => this.onFilterReset(e));
     // const orgs = ['appscode', 'kubedb'];
     // this.getOrgRepos('appscode');
-    this.getRepoIssues('appscode', 'voyager');
+    // this.getRepoIssues('appscode', 'voyager');
   },
   methods: {
     getRepoIssues(orgName, repoName) {
       console.log('thisss: ', this);
+      // this.$store.dispatch('getIssues');
       axios.get(`https://api.github.com/repos/${orgName}/${repoName}/issues`)
         .then((resp) => {
           console.log('resppp: ', resp);
@@ -123,21 +131,6 @@ export default {
         })
         .catch((e) => {
           console.log('eeee: ', e);
-        });
-    },
-    getOrgRepos(orgName) {
-      axios.get(`https://api.github.com/orgs/${orgName}/repos`)
-        .then((resp) => {
-          this.orgs[orgName] = resp.data;
-          return this.orgs[orgName].repos;
-        })
-        .then((repos) => {
-          repos.forEach((repoName) => {
-            this.getRepoIssues(orgName, repoName);
-          });
-        })
-        .catch((e) => {
-          console.log('eee: ', e);
         });
     },
     handleTitle(value, a, b) {
