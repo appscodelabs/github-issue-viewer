@@ -6,10 +6,14 @@
 
 1. Build the `dist/` directory:
   - $ npm run build
-2. Go into `dist/` directory and open index.html file with chrome browser:
-  - cd dist
-  - open index.html
+2. Install `serve` globally by npm or yarn:
+  - $ npm install -g serve
+  - $ yarn --global add serve # install by yarn 
+2. Run the app with `dist/` directory:
+  - serve dist/
 3. Now, open chrome developer tool (`Cmd + Shift + I`) | `Network` | Check `Offline`. Now reload the page, it should work as Charm!
+
+4. Also go chrome developer tool (`Cmd + Shift + I`) | `Application` | `Service Workers`. Now, you should see that `status` = <id> activated and is running!
 
 ## Build Setup
 
@@ -20,7 +24,7 @@ npm install
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
+# build for production
 npm run build
 
 # build for production and view the bundle analyzer report
