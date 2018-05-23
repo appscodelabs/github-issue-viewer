@@ -1,19 +1,44 @@
 <template>
-  <div>
-    <filter-bar></filter-bar>
+  <div class="container">
+    <br/>
+    <div class="container" style="margin-bottom:10px">
+      <form>
+        <div class="form-inline">
+
+          <filter-bar></filter-bar>
+          <filter-time></filter-time>
+          <filter-org></filter-org>
+        </div>
+    </form>
+
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-11">
+          <tags-input element-id="tags"
+            v-model="orgs"
+            placeholder="      Add Organization"
+            :typeahead="false">
+          </tags-input>
+        </div>
+      </div>
+    </div>
+    <br/>
+
     <Vuetable ref="vuetable"
-    :api-mode="false"
-    :data="issues"
-    data-path="data"
-    :fields="fields"
-    pagination-path=""
-    :per-page="20"
-    :multi-sort="true"
-    :sort-order="sortOrder"
-    :append-params="appendParams"
-    detail-row-component="my-detail-row"
-    @vuetable:cell-clicked="onCellClicked"
-    @vuetable:pagination-data="onPaginationData"
+      :api-mode="false"
+      :data="getIssues"
+      data-path="data"
+      :fields="fields"
+      pagination-path=""
+      :per-page="20"
+      :multi-sort="true"
+      :sort-order="sortOrder"
+      :append-params="appendParams"
+      detail-row-component="my-detail-row"
+      @vuetable:cell-clicked="onCellClicked"
+      @vuetable:pagination-data="onPaginationData"
     >
       <template slot="titlelink" scope="props">
         <div>
@@ -54,15 +79,21 @@ import Vuetable from 'vuetable-2/src/components/Vuetable';
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
 // import CustomActions from './CustomActions';
 import VueEvents from 'vue-events';
-import axios from 'axios';
+import VoerroTagsInput from '@voerro/vue-tagsinput';
+
 // import DetailRow from './DetailRow';
 import FilterBar from './FilterBar';
+import FilterTime from './FilterTime';
+import FilterOrg from './FilterOrg';
 // import FieldDefs from './FieldDefs';
 import VuetablePaginationBootstrap from './VuetablePaginationBootstrap';
 
+Vue.component('tags-input', VoerroTagsInput);
 Vue.use(VueEvents);
 // Vue.component('my-detail-row', DetailRow);
 Vue.component('filter-bar', FilterBar);
+Vue.component('filter-time', FilterTime);
+Vue.component('filter-org', FilterOrg);
 
 export default {
   name: 'my-vuetable',
@@ -104,44 +135,28 @@ export default {
   data() {
     return {
       // fields: FieldDefs,
-      orgs: {},
       repos: [],
     };
   },
   computed: {
-    issues() {
+    getIssues() {
       return this.$store.getters.getIssues;
+    },
+    orgs: {
+      get: function get() {
+        return this.$store.getters.getOrgs;
+      },
+      set: function set(value) {
+        console.log('value: ', value);
+        this.$store.dispatch('setOrgs', value);
+      },
     },
   },
   mounted() {
     this.$events.$on('filter-set', eventData => this.onFilterSet(eventData));
     this.$events.$on('filter-reset', e => this.onFilterReset(e));
-    // const orgs = ['appscode', 'kubedb'];
-    // this.getOrgRepos('appscode');
-    // this.getRepoIssues('appscode', 'voyager');
   },
   methods: {
-    getRepoIssues(orgName, repoName) {
-      console.log('thisss: ', this);
-      // this.$store.dispatch('getIssues');
-      axios.get(`https://api.github.com/repos/${orgName}/${repoName}/issues`)
-        .then((resp) => {
-          console.log('resppp: ', resp);
-          this.issues = resp;
-        })
-        .catch((e) => {
-          console.log('eeee: ', e);
-        });
-    },
-    handleTitle(value, a, b) {
-      console.log('value: ', value);
-      console.log('a: ', a);
-      console.log('b: ', b);
-      return value;
-    },
-    handleSalary(value) {
-      return `${value} 000`;
-    },
     onPaginationData(paginationData) {
       this.$refs.pagination.setPaginationData(paginationData);
     },
@@ -187,3 +202,33 @@ export default {
   },
 };
 </script>
+
+<style>
+.tag {
+  font-size: 14px;
+  padding: .3em .4em .4em;
+  margin: 0 .1em;
+}
+.tag a {
+  color: #bbb;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.tag a:hover {
+  opacity: 1.0
+}
+.tag .remove {
+  vertical-align: bottom;
+  top: 0;
+}
+.tag a {
+  margin: 0 0 0 .3em;
+}
+.tag a .glyphicon-white {
+  color: #fff;
+  margin-bottom: 2px;
+}
+.form-control {
+  width: 50%;
+}
+</style>

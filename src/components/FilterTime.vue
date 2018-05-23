@@ -1,8 +1,15 @@
 <template>
-    <div class="form-group col-md-3">
-      <label for="inputEmail4">Search :</label>
-      <input type="text" v-model="filterText" class="form-control" id="inputEmail4" placeholder=" search in title ">
-    </div>
+  <div class="form-group col-md-4">
+    <label for="inputState">Filter</label>
+    <select id="inputState" class="form-control">
+      <option selected>All</option>
+      <option>Last 7 days</option>
+      <option>Last 15 days</option>
+      <option>Last 30 days</option>
+      <option>Most Recent 5</option>
+      <option>Most Recent 10</option>
+    </select>
+  </div>
 </template>
 
   <script>

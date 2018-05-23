@@ -14,6 +14,10 @@ export default [
   },
  */
   {
+    name: 'number',
+    title: 'Issue #',
+  },
+  {
     name: '__slot:titlelink',
     title: 'Title',
   },
