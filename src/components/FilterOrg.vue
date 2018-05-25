@@ -15,8 +15,7 @@
     },
     computed: {
       orgs() {
-        console.log('>>>', this.$store.getters.getOrgs);
-        return this.$store.getters.getOrgs;
+        return this.$store.getters.getOrgs.split(',');
       },
       filterOrg: {
         get: function get() {

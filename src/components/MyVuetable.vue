@@ -1,17 +1,8 @@
 <template>
   <div class="container">
     <br/>
-    <div class="container" style="margin-bottom:10px">
-      <form>
-        <div class="form-inline">
 
-          <filter-bar></filter-bar>
-          <filter-time></filter-time>
-          <filter-org></filter-org>
-        </div>
-    </form>
-
-    </div>
+    <github-token></github-token>
 
     <div class="container">
       <div class="row">
@@ -26,12 +17,26 @@
     </div>
     <br/>
 
+    <div class="container" style="margin-bottom:10px">
+      <form>
+        <div class="form-inline">
+
+          <filter-org></filter-org>
+          <filter-time></filter-time>
+          <filter-bar></filter-bar>
+
+        </div>
+    </form>
+
+    </div>
+
     <Vuetable ref="vuetable"
       :api-mode="false"
       :data="getIssues"
       data-path="data"
       :fields="fields"
       pagination-path=""
+      :row-class="onRowClass"
       :per-page="20"
       :multi-sort="true"
       :sort-order="sortOrder"
@@ -81,7 +86,7 @@ import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePagination
 import VueEvents from 'vue-events';
 import VoerroTagsInput from '@voerro/vue-tagsinput';
 
-// import DetailRow from './DetailRow';
+import GithubToken from './GithubToken';
 import FilterBar from './FilterBar';
 import FilterTime from './FilterTime';
 import FilterOrg from './FilterOrg';
@@ -91,6 +96,7 @@ import VuetablePaginationBootstrap from './VuetablePaginationBootstrap';
 Vue.component('tags-input', VoerroTagsInput);
 Vue.use(VueEvents);
 // Vue.component('my-detail-row', DetailRow);
+Vue.component('github-token', GithubToken);
 Vue.component('filter-bar', FilterBar);
 Vue.component('filter-time', FilterTime);
 Vue.component('filter-org', FilterOrg);
@@ -103,7 +109,7 @@ export default {
     VuetablePaginationBootstrap,
   },
   created() {
-    this.$store.dispatch('getRepoIssues');
+    // this.$store.dispatch('getRepoIssues');
   },
   props: {
     /*
@@ -148,7 +154,7 @@ export default {
       },
       set: function set(value) {
         console.log('value: ', value);
-        this.$store.dispatch('setOrgs', value);
+        this.$store.dispatch('setOrgs', value.join(','));
       },
     },
   },
@@ -157,6 +163,11 @@ export default {
     this.$events.$on('filter-reset', e => this.onFilterReset(e));
   },
   methods: {
+    onRowClass(dataItem, index, a, b) {
+      console.log('dataItem: ', dataItem);
+      console.log('index: ', index);
+      console.log('b: ', b);
+    },
     onPaginationData(paginationData) {
       this.$refs.pagination.setPaginationData(paginationData);
     },
