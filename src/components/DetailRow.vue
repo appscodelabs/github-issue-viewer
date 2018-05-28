@@ -35,8 +35,8 @@
       },
     },
     methods: {
-      onClick(event) {
-        console.log('my-detail-row: on-click', event.target);
+      onClick(/* event */) {
+        // console.log('my-detail-row: on-click', event.target);
       },
     },
   };

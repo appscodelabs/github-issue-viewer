@@ -267,7 +267,6 @@ export default new Vuex.Store({
           const getIssues = store.get(`${orgName}/${repoName}`);
           getIssues.onsuccess = function getIssuesSuccess() {
             const allIssues = JSON.parse(getIssues.result);
-            console.log('getIssues.result: ', allIssues);
             dispatchAddIssue(allIssues);
             addMostRecent5Issues(allIssues);
             addMostRecent10Issues(allIssues);

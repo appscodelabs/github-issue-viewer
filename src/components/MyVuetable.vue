@@ -155,7 +155,6 @@ export default {
         return this.$store.getters.getOrgs;
       },
       set: function set(value) {
-        console.log('value: ', value);
         this.$store.dispatch('setOrgs', value.join(','));
       },
     },
@@ -191,7 +190,7 @@ export default {
               }
             };
             getClickedTimestamp.onerror = function getClickedTimestampError(e) {
-              console.log('rrrrr: ', e);
+              console.log('error: ', e);
             };
 
             tx.oncomplete = function c() {
@@ -238,24 +237,19 @@ export default {
     onChangePage(page) {
       this.$refs.vuetable.changePage(page);
     },
-    onAction(action, data, index) {
-      console.log(`slot) action: ${action} ${data.name} ${index}`);
+    onAction(/* action, data, index */) {
+      // console.log(`slot) action: ${action} ${data.name} ${index}`);
     },
-    onCellClicked(data, field, event) {
-      console.log('cellClicked: data: ', data);
-      console.log('cellClicked: field: ', field.name);
-      console.log('cellClicked: event: ', event);
+    onCellClicked(data /* field, event */) {
       this.$refs.vuetable.toggleDetailRow(data.id);
     },
     onFilterSet(filterText) {
-      console.log('filter-set: ', filterText);
       this.appendParams.filter = filterText;
       Vue.nextTick(() => this.$refs.vuetable.refresh());
     },
     onFilterReset() {
       delete this.appendParams.filter;
       Vue.nextTick(() => this.$refs.vuetable.refresh());
-      console.log('filter-reset: ');
     },
     renderPagination(h) {
       return h(

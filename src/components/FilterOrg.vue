@@ -22,7 +22,6 @@
           return this.$store.getters.getFilterOrg;
         },
         set: function set(orgName) {
-          console.log('set filterOrgName: ', orgName);
           this.$store.dispatch('setFilterOrg', orgName);
         },
       },
