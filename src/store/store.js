@@ -161,11 +161,11 @@ export default new Vuex.Store({
           },
           {
             title: issue.title,
-            html_url: issue.html_url,
+            htmlUrl: issue.html_url,
             number: (issue.number.toString()).padStart(5, ' '),
             createdAt: issue.created_at,
             timestamp: moment(issue.created_at).valueOf(),
-            modifiedAt: moment(issue.modified_at).valueOf(),
+            updatedAt: moment(issue.updated_at).valueOf(),
           });
 
           if (!whichArray && !state.issueUrlUnique[issue.html_url]) {
@@ -194,17 +194,18 @@ export default new Vuex.Store({
       };
 
       let issuesLastUpdated = localStorage.getItem(`${orgName}-${repoName}-issues`);
-      const needToUpdate = !issuesLastUpdated || (issuesLastUpdated - moment().subtract(1, 'h')) < 0;
-      if (needToUpdate) {
+      const needToUpdate = !issuesLastUpdated || (issuesLastUpdated - moment().subtract(20, 'minutes')) < 0;
+      if (!needToUpdate) {
         const idb = global.indexedDB ||
         global.mozIndexedDB ||
         global.webkitIndexedDB ||
         global.msIndexedDB;
-        console.log('orgName: ', orgName, 'repoName: ', repoName);
 
+        // const apiUrl = 'https://api.github.com/repos/sajibcse68/delete-it/issues';
         const apiUrl = state.githubToken ?
-          `https://api.github.com/repos/${orgName}/${repoName}/issues?access_token=b4ac23a0224ef3062b25007d375def4f471547fa` :
+          `https://api.github.com/repos/${orgName}/${repoName}/issues?access_token=${state.githubToken}` :
           `https://api.github.com/repos/${orgName}/${repoName}/issues`;
+
         const resp = await axios.get(apiUrl);
         /*
         const resp = {
@@ -281,10 +282,10 @@ export default new Vuex.Store({
     async getRepos({ commit, state, dispatch }, orgName) {
       let repoNames = localStorage.getItem(orgName);
       const repoNamesLastUpdated = localStorage.getItem(`${orgName}RepoNamesLastUpdated`);
-      const needToUpdate = !repoNamesLastUpdated || (repoNamesLastUpdated - moment().subtract(3, 'h').valueOf()) < 0;
+      const needToUpdate = !repoNamesLastUpdated || (repoNamesLastUpdated - moment().subtract(20, 'minutes').valueOf()) < 0;
       if (needToUpdate) {
         const apiUrl = state.githubToken ?
-          `https://api.github.com/orgs/${orgName}/repos?access_token=b4ac23a0224ef3062b25007d375def4f471547fa` :
+          `https://api.github.com/orgs/${orgName}/repos?access_token=${state.githubToken}` :
           `https://api.github.com/orgs/${orgName}/repos`;
         const resp = await axios.get(apiUrl);
         repoNames = resp.data.map(repo => repo.name);

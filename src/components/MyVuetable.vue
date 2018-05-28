@@ -47,9 +47,10 @@
     >
       <template slot="titlelink" scope="props">
         <div>
-          <a :href="props.rowData.html_url" target="_blank">{{ props.rowData.title }}</a>
+          <a @click="handleClickOnTitle(props)" :href="props.rowData.htmlUrl" target="_blank">{{ props.rowData.title }}</a>
         </div>
       </template>
+
       <template slot="actions" scope="props">
         <div class="custom-actions">
           <button class="ui basic button"
@@ -92,6 +93,7 @@ import FilterTime from './FilterTime';
 import FilterOrg from './FilterOrg';
 // import FieldDefs from './FieldDefs';
 import VuetablePaginationBootstrap from './VuetablePaginationBootstrap';
+// import func from './vue-temp/vue-editor-bridge';
 
 Vue.component('tags-input', VoerroTagsInput);
 Vue.use(VueEvents);
@@ -163,10 +165,72 @@ export default {
     this.$events.$on('filter-reset', e => this.onFilterReset(e));
   },
   methods: {
-    onRowClass(dataItem, index, a, b) {
-      console.log('dataItem: ', dataItem);
-      console.log('index: ', index);
-      console.log('b: ', b);
+    async onRowClass(dataItem /* index */) {
+      const htmlUrl = dataItem.htmlUrl;
+      const updatedAt = dataItem.updatedAt;
+
+      function choiceRowClass() {
+        return new Promise((resolve) => {
+          const idb = global.indexedDB ||
+                      global.mozIndexedDB ||
+                      global.webkitIndexedDB ||
+                      global.msIndexedDB;
+
+          const open = idb.open('issues-clicked-timestamp', 1);
+          let db = '';
+          open.onsuccess = function openSuccess() {
+            db = open.result;
+            const tx = db.transaction('issue', 'readonly');
+            const store = tx.objectStore('issue');
+            const getClickedTimestamp = store.get(htmlUrl);
+            getClickedTimestamp.onsuccess = function getClickedTimestampSuccess() {
+              const clickedTimestamp = getClickedTimestamp.result;
+
+              if (clickedTimestamp && clickedTimestamp < updatedAt) {
+                resolve('updated-later');
+              }
+            };
+            getClickedTimestamp.onerror = function getClickedTimestampError(e) {
+              console.log('rrrrr: ', e);
+            };
+
+            tx.oncomplete = function c() {
+              db.close();
+            };
+          };
+        });
+      }
+
+      const className = await choiceRowClass();
+      document.querySelector(`a[href="${htmlUrl}"]`).classList.add(className);
+      return className;
+    },
+    handleClickOnTitle(value) {
+      document.querySelector(`a[href="${value.rowData.htmlUrl}"]`).classList.remove('updated-later');
+
+      const idb = global.indexedDB ||
+        global.mozIndexedDB ||
+        global.webkitIndexedDB ||
+        global.msIndexedDB;
+
+      const open = idb.open('issues-clicked-timestamp', 1);
+      let db = '';
+      open.onupgradeneeded = function a() {
+        db = open.result;
+        db.createObjectStore('issue', { autoIncrement: true });
+      };
+
+      open.onsuccess = function b() {
+        db = open.result;
+        const tx = db.transaction('issue', 'readwrite');
+        const store = tx.objectStore('issue');
+
+        store.put(value.rowData.updatedAt, value.rowData.htmlUrl);
+
+        tx.oncomplete = function c() {
+          db.close();
+        };
+      };
     },
     onPaginationData(paginationData) {
       this.$refs.pagination.setPaginationData(paginationData);
@@ -241,5 +305,9 @@ export default {
 }
 .form-control {
   width: 50%;
+}
+.updated-later {
+  color: blue;
+  font-weight: 700
 }
 </style>
