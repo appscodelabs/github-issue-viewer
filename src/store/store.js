@@ -195,7 +195,7 @@ export default new Vuex.Store({
 
       let issuesLastUpdated = localStorage.getItem(`${orgName}-${repoName}-issues`);
       const needToUpdate = !issuesLastUpdated || (issuesLastUpdated - moment().subtract(20, 'minutes')) < 0;
-      if (!needToUpdate) {
+      if (needToUpdate) {
         const idb = global.indexedDB ||
         global.mozIndexedDB ||
         global.webkitIndexedDB ||

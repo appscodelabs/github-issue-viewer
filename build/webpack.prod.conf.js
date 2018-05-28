@@ -108,7 +108,12 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: 'service-worker.js',
       staticFileGlobs: ['dist/**/*.{js,html,css}'],
       minify: true,
-      stripPrefix: 'dist/'
+      stripPrefix: 'dist/',
+      runtimeCaching: [{
+        urlPattern: /^https:\/\/fonts.googleapis.com\/css/,
+        // Use network first and cache as a fallback
+        handler: 'networkFirst'
+      }]
     })
   ]
 })
