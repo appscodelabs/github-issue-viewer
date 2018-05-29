@@ -37,12 +37,11 @@ export default [
   */
   {
     name: '__slot:issueNumber',
-    title: 'Issue Number',
+    title: 'Issue #',
   },
   {
     name: 'createdAt',
     title: 'Created At',
-    sortField: 'createdAt',
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },

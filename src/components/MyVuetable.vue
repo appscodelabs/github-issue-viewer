@@ -50,7 +50,12 @@
       </template>
       <template slot="titlelink" scope="props">
         <div>
-          <a @click="handleClickOnTitle(props)" :href="props.rowData.htmlUrl" target="_blank">{{ props.rowData.title }} <span v-if="props.rowData.isPR" class="badge badge-light">PR</span></a>
+          <a @click="handleClickOnTitle(props)" :href="props.rowData.htmlUrl" target="_blank">
+            <span v-if="props.rowData.isPR" class="badge badge-light">PR</span> {{ props.rowData.title }}
+            <template v-for="(label, index) in props.rowData.labels">
+              <span class="badge" :style="getLabelStyle(label)" :key="index">{{ label.name }}</span> {{ &nbsp }}
+            </template>
+          </a>
         </div>
       </template>
 
@@ -276,6 +281,9 @@ export default {
           }),
         ],
       );
+    },
+    getLabelStyle(label) {
+      return { 'background-color': `#${label.color}` };
     },
   },
 };

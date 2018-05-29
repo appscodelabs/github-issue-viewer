@@ -162,6 +162,7 @@ export default new Vuex.Store({
           },
           {
             title: issue.title,
+            labels: issue.labels,
             htmlUrl: issue.html_url,
             number: issue.number.toString(),
             createdAt: issue.created_at,
