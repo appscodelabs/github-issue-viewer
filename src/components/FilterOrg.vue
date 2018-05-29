@@ -1,7 +1,7 @@
 <template>
-  <div class="form-group col-md-4">
-    <label for="org-name">Organization :</label>
-    <select id="org-name" v-model="filterOrg" class="form-control">
+  <div class="form-group pull-left">
+    <label for="filer-org">Organization: </label>
+    <select id="filer-org" v-model="filterOrg" class="form-control">
       <option value=''>All</option>
       <option v-for="org in orgs" :key="org">{{ org }}</option>
     </select>
@@ -28,3 +28,8 @@
     },
   };
 </script>
+<style>
+.form-group {
+  padding: 15px
+}
+</style>

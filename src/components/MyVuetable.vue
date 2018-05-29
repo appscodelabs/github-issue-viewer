@@ -45,9 +45,18 @@
       @vuetable:cell-clicked="onCellClicked"
       @vuetable:pagination-data="onPaginationData"
     >
+      <template slot="index" scope="props">
+        {{ props.rowIndex + 1 }}
+      </template>
       <template slot="titlelink" scope="props">
         <div>
-          <a @click="handleClickOnTitle(props)" :href="props.rowData.htmlUrl" target="_blank">{{ props.rowData.title }}</a>
+          <a @click="handleClickOnTitle(props)" :href="props.rowData.htmlUrl" target="_blank">{{ props.rowData.title }} <span v-if="props.rowData.isPR" class="badge badge-light">PR</span></a>
+        </div>
+      </template>
+
+      <template slot="issueNumber" scope="props">
+        <div>
+          <a @click="handleClickOnTitle(props)" :href="props.rowData.htmlUrl" target="_blank">{{props.rowData.orgName}}/{{ props.rowData.repoName}}#{{props.rowData.number}}</a>
         </div>
       </template>
 

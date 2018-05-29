@@ -1,7 +1,7 @@
 <template>
-    <div class="form-group col-md-3">
-      <label for="inputEmail4">Search :</label>
-      <input type="text" v-model="filterText" class="form-control" id="inputEmail4" placeholder=" Search in Title, Issue #">
+    <div class="form-group pull-right">
+      <label for="filterText">Search: </label>
+      <input type="text" v-model="filterText" class="form-control" id="filterText" placeholder="Title, Issue #, Repository">
     </div>
 </template>
 

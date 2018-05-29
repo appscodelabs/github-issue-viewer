@@ -6,21 +6,20 @@ export default [
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },
- */
-  /*
-  {
-    name: 'title',
-    callback: 'handleTitle|url',
-  },
- */
   {
     name: 'number',
     title: 'Issue #',
+  },
+  */
+  {
+    name: '__slot:index',
+    title: '#',
   },
   {
     name: '__slot:titlelink',
     title: 'Title',
   },
+  /*
   {
     name: 'orgName',
     title: 'Organization',
@@ -34,6 +33,11 @@ export default [
     sortField: 'repoName',
     titleClass: 'center aligned',
     dataClass: 'center aligned',
+  },
+  */
+  {
+    name: '__slot:issueNumber',
+    title: 'Issue Number',
   },
   {
     name: 'createdAt',

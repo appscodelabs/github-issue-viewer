@@ -121,7 +121,8 @@ export default new Vuex.Store({
 
         filteredIssues = filteredIssues.filter(issue =>
           issue.title.search(regexp) >= 0 ||
-          issue.number.search(regexp) >= 0);
+          issue.number.search(regexp) >= 0 ||
+          issue.repoName.search(regexp) >= 0);
       }
       state.filteredIssues = filteredIssues.sort((a, b) => a.createdAt - b.createdAt);
     },
@@ -162,10 +163,11 @@ export default new Vuex.Store({
           {
             title: issue.title,
             htmlUrl: issue.html_url,
-            number: (issue.number.toString()).padStart(5, ' '),
+            number: issue.number.toString(),
             createdAt: issue.created_at,
             timestamp: moment(issue.created_at).valueOf(),
             updatedAt: moment(issue.updated_at).valueOf(),
+            isPR: issue.html_url.search('/pull/') >= 0,
           });
 
           if (!whichArray && !state.issueUrlUnique[issue.html_url]) {
