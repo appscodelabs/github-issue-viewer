@@ -47,12 +47,6 @@ export default [
   },
 /*
   {
-    name: 'age',
-    sortField: 'age',
-    titleClass: 'center aligned',
-    dataClass: 'center aligned',
-  },
-  {
     name: 'salary',
     sortField: 'salary',
     titleClass: 'center aligned',
