@@ -39,8 +39,6 @@
       :row-class="onRowClass"
       :per-page="20"
       :multi-sort="true"
-      :sort-order="sortOrder"
-      :append-params="appendParams"
       detail-row-component="my-detail-row"
       @vuetable:cell-clicked="onCellClicked"
       @vuetable:pagination-data="onPaginationData"
@@ -82,13 +80,16 @@
         </div>
       </template>
     </Vuetable>
-
+    <br/>
+    <br/>
+    <!--
     <div class="vuetable-pagination ui basic segment grid">
       <vuetable-pagination-bootstrap ref="pagination"
         class="pull-right"
         @vuetable-pagination:change-page="onChangePage"
       ></vuetable-pagination-bootstrap>
     </div>
+    -->
   </div>
 </template>
 
@@ -101,6 +102,7 @@ import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePagination
 import VueEvents from 'vue-events';
 import VoerroTagsInput from '@voerro/vue-tagsinput';
 
+import FieldDefs from './FieldDefs';
 import GithubToken from './GithubToken';
 import FilterBar from './FilterBar';
 import FilterTime from './FilterTime';
@@ -134,30 +136,12 @@ export default {
       required: true,
     },
     */
-    fields: {
-      type: Array,
-      required: true,
-    },
-    sortOrder: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    appendParams: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-    detailRowComponent: {
-      type: String,
-    },
   },
   data() {
     return {
       // fields: FieldDefs,
       repos: [],
+      fields: FieldDefs,
     };
   },
   computed: {

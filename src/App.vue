@@ -1,14 +1,7 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <div class="ui container">
-      <my-vuetable
-        :fields="fields"
-        :sort-order="sortOrder"
-        :append-params="moreParams"
-        detail-row-component="my-detail-row"
-      ></my-vuetable>
-    </div>
+      <router-view></router-view>
   </div>
 </template>
 
