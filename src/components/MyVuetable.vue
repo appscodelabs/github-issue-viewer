@@ -127,7 +127,29 @@ export default {
     VuetablePaginationBootstrap,
   },
   created() {
+    console.log('created');
     // this.$store.dispatch('getRepoIssues');
+    console.log('query', this.$route.query);
+    const query = this.$route.query;
+    if (query) {
+      if (query.org) {
+        let orgs = this.$store.getters.getOrgs;
+        if (!orgs) {
+          this.$store.dispatch('setOrgs', query.org);
+        } else if (!orgs.split(',').includes(query.org)) {
+          orgs = `${orgs},${query.org}`;
+          this.$store.dispatch('setOrgs', orgs);
+        }
+        this.$store.dispatch('setFilterOrg', query.org);
+      } else {
+        this.$store.dispatch('setFilterOrg', '');
+      }
+      if (query.time) {
+        this.$store.dispatch('setFilterTime', query.time);
+      } else {
+        this.$store.dispatch('setFilterTime', '');
+      }
+    }
   },
   props: {
     /*
@@ -144,6 +166,34 @@ export default {
       fields: FieldDefs,
     };
   },
+  watch: {
+    /* eslint-disable */
+    $route: function (to, from) {
+      console.log('to: ', to);
+      console.log('from: ', from);
+
+      const query = to.query;
+      if (query) {
+        if (query.org) {
+          let orgs = this.$store.getters.getOrgs;
+          if (!orgs) {
+            this.$store.dispatch('setOrgs', query.org);
+          } else if (!orgs.split(',').includes(query.org)) {
+            orgs = `${orgs},${query.org}`;
+            this.$store.dispatch('setOrgs', orgs);
+          }
+          this.$store.dispatch('setFilterOrg', query.org);
+        } else {
+          this.$store.dispatch('setFilterOrg', '');
+        }
+        if (query.time) {
+          this.$store.dispatch('setFilterTime', query.time);
+        } else {
+          this.$store.dispatch('setFilterTime', '');
+        }
+      }
+    },
+  },
   computed: {
     getIssues() {
       return this.$store.getters.getIssues;
@@ -158,6 +208,7 @@ export default {
     },
   },
   mounted() {
+    console.log('mountedddd');
     this.$events.$on('filter-set', eventData => this.onFilterSet(eventData));
     this.$events.$on('filter-reset', e => this.onFilterReset(e));
   },
