@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
 import moment from 'moment';
+import getters from './getters';
+import mutations from './mutations';
 
 Vue.use(Vuex);
 Vue.use(require('vue-moment'), {
@@ -25,108 +27,11 @@ export default new Vuex.Store({
     filterOrg: '',
     filterTime: '',
   },
-  getters: {
-    getIssues: state => state.filteredIssues.sort((a, b) => b.timestamp - a.timestamp),
-    getOrgs: state => state.orgs,
-    getFilterText: state => state.filterText,
-    getFilterOrg: state => state.filterOrg,
-    getFilterTime: state => state.filterTime,
-    getGithubToken: state => state.githubToken,
-  },
-  mutations: {
-    /* eslint-disable no-param-reassign */
-    SET_ORGS(state, orgs) {
-      state.orgs = orgs;
-    },
-    SET_GITHUB_TOKEN(state, githubToken) {
-      state.githubToken = githubToken;
-    },
-    /* eslint-disable no-param-reassign */
-    ADD_REPOS(state, repos) {
-      state.repos = [...state.repos, ...repos];
-    },
-    ADD_ISSUE(state, newIssue) {
-      state.issues.push(newIssue);
-      state.filteredIssues.push(newIssue);
-    },
-    ADD_RECENT_5_ISSUE(state, newIssue) {
-      state.recent5Issues.push(newIssue);
-    },
-    ADD_RECENT_10_ISSUE(state, newIssue) {
-      state.recent10Issues.push(newIssue);
-    },
-    SET_FILTER_TEXT(state, filterText) {
-      state.filterText = filterText;
-    },
-    SET_FILTER_ORG(state, filterOrg) {
-      state.filterOrg = filterOrg;
-    },
-    SET_FILTER_TIME(state, filterTime) {
-      state.filterTime = filterTime;
-    },
-    UPDATE_FILTER_ISSUES(state) {
-      let filteredIssues = ''; // [...state.issues]
-      if (state.filterTime) {
-        const filterTime = state.filterTime;
 
-        if (filterTime === 'recent5') {
-          filteredIssues = state.recent5Issues;
-        } else if (filterTime === 'recent10') {
-          filteredIssues = state.recent10Issues;
-        } else {
-          filteredIssues = [...state.issues];
-        }
+  getters,
 
-        switch (filterTime) {
-          case '7days': {
-            const time7DaysAgo = moment().subtract(7, 'd');
-            filteredIssues = filteredIssues.filter((issue) => {
-              const b = issue.timestamp - time7DaysAgo.valueOf();
-              return b >= 0;
-            });
-            break;
-          }
-          case '15days': {
-            const time15DaysAgo = moment().subtract(15, 'd');
-            filteredIssues = filteredIssues.filter(issue =>
-              issue.timestamp >= time15DaysAgo.valueOf());
-            break;
-          }
-          case '30days': {
-            const time30DaysAgo = moment().subtract(30, 'd');
-            filteredIssues = filteredIssues.filter((issue) => {
-              const a = issue.timestamp - time30DaysAgo.valueOf();
-              return a >= 0;
-            });
-            break;
-          }
-          default: {
-            break;
-          }
-        }
-      } else {
-        filteredIssues = [...state.issues];
-      }
+  mutations,
 
-      if (state.filterOrg) {
-        const regexp = new RegExp(state.filterOrg, 'i');
-        filteredIssues = filteredIssues.filter(((issue) => {
-          const res = issue.orgName.search(regexp) >= 0;
-          return res;
-        }));
-      }
-
-      if (state.filterText) {
-        const regexp = new RegExp(state.filterText, 'i');
-
-        filteredIssues = filteredIssues.filter(issue =>
-          issue.title.search(regexp) >= 0 ||
-          issue.number.search(regexp) >= 0 ||
-          issue.repoName.search(regexp) >= 0);
-      }
-      state.filteredIssues = filteredIssues.sort((a, b) => a.createdAt - b.createdAt);
-    },
-  },
   actions: {
     setOrgs({ commit, dispatch }, orgs) {
       localStorage.setItem('orgs', orgs);
@@ -171,6 +76,7 @@ export default new Vuex.Store({
             isPR: issue.html_url.search('/pull/') >= 0,
           });
 
+          /* eslint-disable no-param-reassign */
           if (!whichArray && !state.issueUrlUnique[issue.html_url]) {
             state.issueUrlUnique[issue.html_url] = true;
             dispatch('addIssue', newIssue);
