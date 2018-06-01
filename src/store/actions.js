@@ -71,7 +71,7 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
   };
 
   let issuesLastUpdated = localStorage.getItem(`${orgName}-${repoName}-issues`);
-  const needToUpdate = !issuesLastUpdated || (issuesLastUpdated - moment().subtract(20, 'minutes')) < 0;
+  const needToUpdate = !issuesLastUpdated || (issuesLastUpdated - moment().subtract(10, 'minutes')) < 0;
   if (needToUpdate) {
     const idb = global.indexedDB ||
     global.mozIndexedDB ||
@@ -158,7 +158,7 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
 const getRepos = async ({ commit, state, dispatch }, orgName) => {
   let repoNames = localStorage.getItem(orgName);
   const repoNamesLastUpdated = localStorage.getItem(`${orgName}RepoNamesLastUpdated`);
-  const needToUpdate = !repoNamesLastUpdated || (repoNamesLastUpdated - moment().subtract(20, 'minutes').valueOf()) < 0;
+  const needToUpdate = !repoNamesLastUpdated || (repoNamesLastUpdated - moment().subtract(10, 'minutes').valueOf()) < 0;
   if (needToUpdate) {
     const apiUrl = state.githubToken ?
       `https://api.github.com/orgs/${orgName}/repos?access_token=${state.githubToken}` :
