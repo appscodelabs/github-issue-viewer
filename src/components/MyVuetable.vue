@@ -169,9 +169,6 @@ export default {
   watch: {
     /* eslint-disable */
     $route: function (to, from) {
-      console.log('to: ', to);
-      console.log('from: ', from);
-
       const query = to.query;
       if (query) {
         if (query.org) {
@@ -224,11 +221,20 @@ export default {
                       global.webkitIndexedDB ||
                       global.msIndexedDB;
 
-          const open = idb.open('issues-clicked-timestamp', 1);
+          const open = idb.open('issues-clicked-timestamp', 2);
           let db = '';
+          open.onupgradeneeded = function a() {
+            db = open.result;
+            db.createObjectStore('issue', { autoIncrement: true });
+          };
           open.onsuccess = function openSuccess() {
             db = open.result;
+
+            /* if (!db.objectStoreNames.contains('issue')) {
+              db.createObjectStore('issue');
+            } */
             const tx = db.transaction('issue', 'readonly');
+            console.log('TX READONLY SUCCESS');
             const store = tx.objectStore('issue');
             const getClickedTimestamp = store.get(htmlUrl);
             getClickedTimestamp.onsuccess = function getClickedTimestampSuccess() {
@@ -261,7 +267,7 @@ export default {
         global.webkitIndexedDB ||
         global.msIndexedDB;
 
-      const open = idb.open('issues-clicked-timestamp', 1);
+      const open = idb.open('issues-clicked-timestamp', 2);
       let db = '';
       open.onupgradeneeded = function a() {
         db = open.result;
