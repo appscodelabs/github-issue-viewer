@@ -20,6 +20,30 @@ const addRecent5Issues = ({ commit }, newIssue) => {
 const addRecent10Issues = ({ commit }, newIssue) => {
   commit('ADD_RECENT_10_ISSUE', newIssue);
 };
+
+const getDayDiff = (options) => {
+  const timePrev = parseInt(moment(options.createdAt).valueOf() / 1000, 10);
+  const timeNow = Math.floor((new Date()).getTime() / 1000); // utc time (s)
+  let timeRes = timeNow - timePrev;
+  let unit = '';
+  if (timeRes < 60) {
+    unit = ' Second';
+  } else if (timeRes < 3600) {
+    timeRes = parseInt(timeRes / 60, 10);
+    unit = ' Minute';
+  } else if (timeRes < 86400) {
+    timeRes = parseInt(timeRes / 3600, 10);
+    unit = ' Hour';
+  } else {
+    timeRes = parseInt(timeRes / 86400, 10);
+    unit = ' Day';
+  }
+  if (timeRes > 1) {
+    unit = `${unit}s`;
+  }
+  return `${timeRes}${unit} ago`;
+};
+
 const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
   let issues = [];
 
@@ -38,7 +62,7 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
         labels: issue.labels,
         htmlUrl: issue.html_url,
         number: issue.number.toString(),
-        createdAt: issue.created_at,
+        createdAt: getDayDiff({ createdAt: issue.created_at }),
         timestamp: moment(issue.created_at).valueOf(),
         updatedAt: moment(issue.updated_at).valueOf(),
         isPR: issue.html_url.search('/pull/') >= 0,
