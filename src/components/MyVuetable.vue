@@ -225,11 +225,7 @@ export default {
           open.onsuccess = function openSuccess() {
             db = open.result;
 
-            /* if (!db.objectStoreNames.contains('issue')) {
-              db.createObjectStore('issue');
-            } */
             const tx = db.transaction('issue', 'readonly');
-            console.log('TX READONLY SUCCESS');
             const store = tx.objectStore('issue');
             const getClickedTimestamp = store.get(htmlUrl);
             getClickedTimestamp.onsuccess = function getClickedTimestampSuccess() {
