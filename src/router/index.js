@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Hello from '@/components/Hello';
 import MyVuetable from '@/components/MyVuetable';
 
 Vue.use(Router);
@@ -20,11 +19,6 @@ export default new Router({
       path: '/search/:a?',
       name: 'Search',
       component: MyVuetable,
-    },
-    {
-      path: '/test',
-      name: 'Hello',
-      component: Hello,
     },
   ],
 });

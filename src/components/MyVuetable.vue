@@ -39,7 +39,6 @@
       :row-class="onRowClass"
       :per-page="20"
       :multi-sort="true"
-      detail-row-component="my-detail-row"
       @vuetable:cell-clicked="onCellClicked"
       @vuetable:pagination-data="onPaginationData"
     >
@@ -96,9 +95,7 @@
 <script>
 import Vue from 'vue';
 import Vuetable from 'vuetable-2/src/components/Vuetable';
-// import VuetablePagination from 'vuetable-2/src/components/VuetablePaginationDropdown';
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo';
-// import CustomActions from './CustomActions';
 import VueEvents from 'vue-events';
 import VoerroTagsInput from '@voerro/vue-tagsinput';
 
@@ -107,13 +104,10 @@ import GithubToken from './GithubToken';
 import FilterBar from './FilterBar';
 import FilterTime from './FilterTime';
 import FilterOrg from './FilterOrg';
-// import FieldDefs from './FieldDefs';
 import VuetablePaginationBootstrap from './VuetablePaginationBootstrap';
-// import func from './vue-temp/vue-editor-bridge';
 
 Vue.component('tags-input', VoerroTagsInput);
 Vue.use(VueEvents);
-// Vue.component('my-detail-row', DetailRow);
 Vue.component('github-token', GithubToken);
 Vue.component('filter-bar', FilterBar);
 Vue.component('filter-time', FilterTime);
@@ -127,10 +121,10 @@ export default {
     VuetablePaginationBootstrap,
   },
   created() {
-    console.log('created');
-    // this.$store.dispatch('getRepoIssues');
-    console.log('query', this.$route.query);
+    this.$store.dispatch('issuesUpdateTimer');
     const query = this.$route.query;
+
+    // set filtering values when type url, share url, reload page
     if (query) {
       if (query.org) {
         let orgs = this.$store.getters.getOrgs;
@@ -170,6 +164,8 @@ export default {
     /* eslint-disable */
     $route: function (to, from) {
       const query = to.query;
+
+      // handle route change using browser's back/front arrow button
       if (query) {
         if (query.org) {
           let orgs = this.$store.getters.getOrgs;
@@ -205,9 +201,8 @@ export default {
     },
   },
   mounted() {
-    console.log('mountedddd');
-    this.$events.$on('filter-set', eventData => this.onFilterSet(eventData));
-    this.$events.$on('filter-reset', e => this.onFilterReset(e));
+    // this.$events.$on('filter-set', eventData => this.onFilterSet(eventData));
+    // this.$events.$on('filter-reset', e => this.onFilterReset(e));
   },
   methods: {
     async onRowClass(dataItem /* index */) {

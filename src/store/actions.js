@@ -156,6 +156,7 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
   }
 };
 const getRepos = async ({ commit, state, dispatch }, orgName) => {
+  console.log('getRepos is called');
   let repoNames = localStorage.getItem(orgName);
   const repoNamesLastUpdated = localStorage.getItem(`${orgName}RepoNamesLastUpdated`);
   const needToUpdate = !repoNamesLastUpdated || (repoNamesLastUpdated - moment().subtract(10, 'minutes').valueOf()) < 0;
@@ -205,6 +206,13 @@ const getRepoIssues = ({ state, dispatch }) => {
   }
 };
 
+const issuesUpdateTimer = ({ dispatch }) => {
+  /* eslint-disable */
+  setInterval(function timer() {
+    dispatch('getRepoIssues');
+  }, 10 * 60 * 1000);
+};
+
 export default {
   setOrgs,
   setGithubToken,
@@ -217,4 +225,5 @@ export default {
   setFilterOrg,
   setFilterTime,
   getRepoIssues,
+  issuesUpdateTimer,
 };
