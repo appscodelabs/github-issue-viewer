@@ -225,15 +225,21 @@ export default {
           open.onsuccess = function openSuccess() {
             db = open.result;
 
-            const tx = db.transaction('issue', 'readonly');
+            const tx = db.transaction('issue', 'readwrite');
             const store = tx.objectStore('issue');
             const getClickedTimestamp = store.get(htmlUrl);
+
             getClickedTimestamp.onsuccess = function getClickedTimestampSuccess() {
               const clickedTimestamp = getClickedTimestamp.result;
 
-              if (clickedTimestamp && clickedTimestamp < updatedAt) {
-                resolve('updated-later');
+              if (clickedTimestamp) {
+                if (clickedTimestamp < updatedAt) {
+                  resolve('updated-later'); // add 'updated-later class'
+                }
+              } else {
+                store.put(updatedAt, htmlUrl);
               }
+              resolve(''); // no class should be added
             };
             getClickedTimestamp.onerror = function getClickedTimestampError(e) {
               console.log('error: ', e);
@@ -351,6 +357,10 @@ export default {
 }
 .updated-later {
   color: blue;
+  font-weight: 700
+}
+.clicked-now {
+  color: red;
   font-weight: 700
 }
 </style>

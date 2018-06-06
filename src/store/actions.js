@@ -27,16 +27,16 @@ const getDayDiff = (options) => {
   let timeRes = timeNow - timePrev;
   let unit = '';
   if (timeRes < 60) {
-    unit = ' Second';
+    unit = ' second';
   } else if (timeRes < 3600) {
     timeRes = parseInt(timeRes / 60, 10);
-    unit = ' Minute';
+    unit = ' minute';
   } else if (timeRes < 86400) {
     timeRes = parseInt(timeRes / 3600, 10);
-    unit = ' Hour';
+    unit = ' hour';
   } else {
     timeRes = parseInt(timeRes / 86400, 10);
-    unit = ' Day';
+    unit = ' day';
   }
   if (timeRes > 1) {
     unit = `${unit}s`;
