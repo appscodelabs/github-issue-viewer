@@ -239,7 +239,7 @@ export default {
               } else {
                 store.put(updatedAt, htmlUrl);
               }
-              resolve(''); // no class should be added
+              resolve(); // no class should be added
             };
             getClickedTimestamp.onerror = function getClickedTimestampError(e) {
               console.log('error: ', e);
@@ -253,6 +253,7 @@ export default {
       }
 
       const className = await choiceRowClass();
+      // adding the class into title anchor
       document.querySelector(`a[href="${htmlUrl}"]`).classList.add(className);
       return className;
     },
