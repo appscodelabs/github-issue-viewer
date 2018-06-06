@@ -16,6 +16,8 @@ export default new Vuex.Store({
     githubToken: localStorage.getItem('githubToken'),
     repos: [],
     issues: [],
+    checkboxSelectedIssues: [],
+    checkboxSelectedIssueToIndexMap: {},
     issueUrlUnique: {},
     issueRecent5UrlUnique: {},
     issueRecent10UrlUnique: {},

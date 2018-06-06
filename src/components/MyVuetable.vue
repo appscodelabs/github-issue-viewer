@@ -24,10 +24,20 @@
           <filter-org></filter-org>
           <filter-time></filter-time>
           <filter-bar></filter-bar>
-
         </div>
     </form>
+    </div>
 
+    <div v-if="getCheckboxSelectedIssues.length">
+      <form>
+        <div class="btn-group pull-left">
+          <p>Actions: 
+            <span type="button" @click="markTheIssuesAsRead" class="btn btn-default" title="Mark as read"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></span>
+          </p>
+          <br/>
+          <!-- <button type="button" class="btn btn-primary">Samsung</button> -->
+        </div>
+      </form>
     </div>
 
     <Vuetable ref="vuetable"
@@ -36,11 +46,13 @@
       data-path="data"
       :fields="fields"
       pagination-path=""
+      track-by="title"
       :row-class="onRowClass"
-      :per-page="20"
       :multi-sort="true"
       @vuetable:cell-clicked="onCellClicked"
       @vuetable:pagination-data="onPaginationData"
+      @vuetable:checkbox-toggled="onToggleCheckbox"
+      @vuetable:checkbox-toggled-all="onToggleCheckboxAll"
     >
       <template slot="index" scope="props">
         {{ props.rowIndex + 1 }}
@@ -62,6 +74,7 @@
         </div>
       </template>
 
+      <!--
       <template slot="actions" scope="props">
         <div class="custom-actions">
           <button class="ui basic button"
@@ -77,7 +90,9 @@
             <i class="delete icon"></i>
           </button>
         </div>
-      </template>
+      </template> 
+      -->
+
     </Vuetable>
     <br/>
     <br/>
@@ -199,6 +214,12 @@ export default {
         this.$store.dispatch('setOrgs', value.join(','));
       },
     },
+    getCheckboxSelectedIssues: {
+      get: function get() {
+        console.log('Object.keys(this.$store.getters.getCheckboxSelectedIssues).length', this.$store.getters.getCheckboxSelectedIssues.length);
+        return this.$store.getters.getCheckboxSelectedIssues;
+      },
+    },
   },
   mounted() {
     // this.$events.$on('filter-set', eventData => this.onFilterSet(eventData));
@@ -254,11 +275,15 @@ export default {
 
       const className = await choiceRowClass();
       // adding the class into title anchor
-      document.querySelector(`a[href="${htmlUrl}"]`).classList.add(className);
-      return className;
+      if (className) {
+        document.querySelector(`a[href="${htmlUrl}"]`).classList.add(className);
+      }
+      return '';
     },
-    handleClickOnTitle(value) {
-      document.querySelector(`a[href="${value.rowData.htmlUrl}"]`).classList.remove('updated-later');
+    handleClickOnTitle(params) {
+      const htmlUrl = params.rowData.htmlUrl;
+      const updatedAt = params.rowData.updatedAt;
+      document.querySelector(`a[href="${htmlUrl}"]`).classList.remove('updated-later');
 
       const idb = global.indexedDB ||
         global.mozIndexedDB ||
@@ -277,7 +302,7 @@ export default {
         const tx = db.transaction('issue', 'readwrite');
         const store = tx.objectStore('issue');
 
-        store.put(value.rowData.updatedAt, value.rowData.htmlUrl);
+        store.put(updatedAt, htmlUrl);
 
         tx.oncomplete = function c() {
           db.close();
@@ -295,6 +320,26 @@ export default {
     },
     onCellClicked(data /* field, event */) {
       this.$refs.vuetable.toggleDetailRow(data.id);
+    },
+    onToggleCheckbox(isSelected, data) {
+      // this.$store.dispatch('setCheckboxSelectedIssues', this.$refs.vuetable.selectedTo);
+      this.$store.dispatch('updateIssueForCheckboxToggle', { isSelected, htmlUrl: data.htmlUrl, title: data.title, updatedAt: data.updatedAt });
+      console.log('Object.keys(this.$store.getters.getCheckboxSelectedIssues).length: ', this.$store.getters.getCheckboxSelectedIssues.length);
+    },
+    markTheIssuesAsRead() {
+      const checkboxSelectedIssues = this.getCheckboxSelectedIssues;
+      const len = checkboxSelectedIssues.length;
+      for (let i = 0; i < len; i += 1) {
+        this.handleClickOnTitle({ rowData: checkboxSelectedIssues[i] });
+        const index = this.$refs.vuetable.selectedTo.indexOf(checkboxSelectedIssues[i].title);
+        if (index > -1) {
+          this.$refs.vuetable.selectedTo.splice(index, 1);
+        }
+      }
+      this.$store.dispatch('resetCheckboxSelectedIssues');  // reset checkbox selected Items
+    },
+    onToggleCheckboxAll(isSelected) {
+      this.$store.dispatch('updateAllIssuesForCheckboxToggle', { isSelected, all: true });
     },
     onFilterSet(filterText) {
       this.appendParams.filter = filterText;
@@ -358,10 +403,6 @@ export default {
 }
 .updated-later {
   color: blue;
-  font-weight: 700
-}
-.clicked-now {
-  color: red;
   font-weight: 700
 }
 </style>

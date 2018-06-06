@@ -20,6 +20,22 @@ const ADD_RECENT_5_ISSUE = (state, newIssue) => {
 const ADD_RECENT_10_ISSUE = (state, newIssue) => {
   state.recent10Issues.push(newIssue);
 };
+const UPDATE_ISSUE_FOR_CHECKBOX_TOGGLE = (state, checkboxObj) => {
+  if (checkboxObj.isSelected) {
+    state.checkboxSelectedIssues.push(checkboxObj);
+
+    state.checkboxSelectedIssueToIndexMap[checkboxObj.htmlUrl] =
+    state.checkboxSelectedIssues.length - 1;
+  } else {
+    state.checkboxSelectedIssues.splice(
+      state.checkboxSelectedIssueToIndexMap[checkboxObj.htmlUrl],
+      1);
+  }
+};
+const RESET_CHECKBOX_SELECTED_ISSUES = (state) => {
+  state.checkboxSelectedIssues = [];
+  state.checkboxSelectedIssueToIndexMap = {};
+};
 const SET_FILTER_TEXT = (state, filterText) => {
   state.filterText = filterText;
 };
@@ -94,6 +110,8 @@ export default {
   ADD_ISSUE,
   ADD_RECENT_5_ISSUE,
   ADD_RECENT_10_ISSUE,
+  UPDATE_ISSUE_FOR_CHECKBOX_TOGGLE,
+  RESET_CHECKBOX_SELECTED_ISSUES,
   SET_FILTER_TEXT,
   SET_FILTER_ORG,
   SET_FILTER_TIME,

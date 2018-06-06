@@ -58,6 +58,7 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
         repoName,
       },
       {
+        id: issue.title,
         title: issue.title,
         labels: issue.labels,
         htmlUrl: issue.html_url,
@@ -202,6 +203,24 @@ const getRepos = async ({ commit, state, dispatch }, orgName) => {
     dispatch('getIssues', { orgName, repoName });
   }
 };
+const updateIssueForCheckboxToggle = ({ commit }, checkboxObj) => {
+  commit('UPDATE_ISSUE_FOR_CHECKBOX_TOGGLE', checkboxObj);
+};
+const resetCheckboxSelectedIssues = ({ commit }) => {
+  commit('RESET_CHECKBOX_SELECTED_ISSUES');
+};
+const updateAllIssuesForCheckboxToggle = ({ state, commit }, checkboxObj) => {
+  if (checkboxObj.isSelected) {
+    const filteredIssues = [...state.filteredIssues];
+    const len = filteredIssues.length;
+    for (let i = 0; i < len; i += 1) {
+      Object.assign(filteredIssues[i], { isSelected: true });
+      commit('UPDATE_ISSUE_FOR_CHECKBOX_TOGGLE', filteredIssues[i]);
+    }
+  } else {
+    commit('RESET_CHECKBOX_SELECTED_ISSUES');
+  }
+};
 const setFilterText = ({ commit }, filterText) => {
   commit('SET_FILTER_TEXT', filterText);
   commit('UPDATE_FILTER_ISSUES');
@@ -244,6 +263,9 @@ export default {
   addRecent10Issues,
   getIssues,
   getRepos,
+  updateIssueForCheckboxToggle,
+  updateAllIssuesForCheckboxToggle,
+  resetCheckboxSelectedIssues,
   setFilterText,
   setFilterOrg,
   setFilterTime,

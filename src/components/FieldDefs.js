@@ -6,11 +6,12 @@ export default [
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },
-  {
-    name: 'number',
-    title: 'Issue #',
-  },
   */
+  {
+    name: '__checkbox',
+    titleClass: 'text-center',
+    dataClass: 'text-center',
+  },
   {
     name: '__slot:index',
     title: '#',
@@ -45,7 +46,7 @@ export default [
     titleClass: 'center aligned',
     dataClass: 'center aligned',
   },
-/*
+  /*
   {
     name: 'salary',
     sortField: 'salary',
