@@ -13,6 +13,11 @@
             :typeahead="false">
           </tags-input>
         </div>
+
+        <div class="col-md-1 pull-right github">
+            <a class="github-button" href="https://github.com/appscodelabs/github-issue-viewer" target="_blank" title="View on GitHub"> View on GitHub</a>
+        </div>
+
       </div>
     </div>
     <br/>
@@ -410,5 +415,8 @@ export default {
 .updated-later {
   color: blue;
   font-weight: 700
+}
+.github {
+  margin: 5px 0px 0px 0px;
 }
 </style>
