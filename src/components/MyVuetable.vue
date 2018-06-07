@@ -227,10 +227,10 @@ export default {
   },
   methods: {
     async onRowClass(dataItem /* index */) {
-      const htmlUrl = dataItem.htmlUrl;
-      const updatedAt = dataItem.updatedAt;
+      // const htmlUrl = dataItem.htmlUrl;
+      // const updatedAt = dataItem.updatedAt;
 
-      function choiceRowClass() {
+      function choiceRowClass(htmlUrl, updatedAt) {
         return new Promise((resolve) => {
           const idb = global.indexedDB ||
                       global.mozIndexedDB ||
@@ -256,9 +256,13 @@ export default {
               if (clickedTimestamp) {
                 if (clickedTimestamp < updatedAt) {
                   resolve('updated-later'); // add 'updated-later class'
+                  document.querySelector(`a[href="${htmlUrl}"]`).classList.add('updated-later');
+                } else {
+                  document.querySelector(`a[href="${htmlUrl}"]`).classList.remove('updated-later');
                 }
               } else {
                 store.put(updatedAt, htmlUrl);
+                // document.querySelector(`a[href="${htmlUrl}"]`).classList.remove('updated-later');
               }
               resolve(); // no class should be added
             };
@@ -273,11 +277,13 @@ export default {
         });
       }
 
-      const className = await choiceRowClass();
+      const className = choiceRowClass(dataItem.htmlUrl, dataItem.updatedAt);
       // adding the class into title anchor
+      /*
       if (className) {
         document.querySelector(`a[href="${htmlUrl}"]`).classList.add(className);
       }
+      */
       return '';
     },
     handleClickOnTitle(params) {
