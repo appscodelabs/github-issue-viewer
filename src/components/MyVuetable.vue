@@ -15,7 +15,7 @@
         </div>
 
         <div class="col-md-1 pull-right github">
-            <a class="github-button" href="https://github.com/appscodelabs/github-issue-viewer" target="_blank" title="View on GitHub"> View on GitHub</a>
+            <a class="github-button" href="https://github.com/appscodelabs/github-issue-viewer" target="_blank" title="View on GitHub"> GitHub</a>
         </div>
 
       </div>
