@@ -380,10 +380,10 @@ export default {
     getLabelStyle(label) {
       const hexToLuma = (colour) => {
         const hex   = colour.replace(/#/, '');
-        const r     = parseInt(hex.substr(0, 2), 16) * 0.299;
-        const g     = parseInt(hex.substr(2, 2), 16) * 0.587;
-        const b     = parseInt(hex.substr(4, 2), 16) * 0.114;
-        /*
+        const r     = 255 - parseInt(hex.substr(0, 2), 16);
+        const g     = 255 - parseInt(hex.substr(2, 2), 16);
+        const b     = 255 - parseInt(hex.substr(4, 2), 16);
+       /*
         var r = (hex & 0xff0000) >> 16;
         var g = (hex & 0x00ff00) >> 8;
         var b = hex & 0x0000ff;
