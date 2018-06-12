@@ -67,7 +67,7 @@
           <a @click="handleClickOnTitle(props)" :href="props.rowData.htmlUrl" target="_blank">
             <span v-if="props.rowData.isPR" class="badge badge-light">PR</span> {{ props.rowData.title }}
             <template v-for="(label, index) in props.rowData.labels">
-              <span class="badge" :style="getLabelStyle(label)" :key="index">{{ label.name }}</span> {{ &nbsp }}
+              <span class="badge" :style="getLabelStyle(label)" :key="index">{{ label.name }}</span> &nbsp
             </template>
           </a>
         </div>
@@ -378,7 +378,23 @@ export default {
       );
     },
     getLabelStyle(label) {
-      return { 'background-color': `#${label.color}` };
+      const hexToLuma = (colour) => {
+        const hex   = colour.replace(/#/, '');
+        const r     = 255 - parseInt(hex.substr(0, 2), 16);
+        const g     = 255 - parseInt(hex.substr(2, 2), 16);
+        const b     = 255 - parseInt(hex.substr(4, 2), 16);
+       /*
+        var r = (hex & 0xff0000) >> 16;
+        var g = (hex & 0x00ff00) >> 8;
+        var b = hex & 0x0000ff;
+        */
+
+        return [ r, g, b ]
+      };
+      const bg = label.color;
+      const fontColor = hexToLuma(bg);
+      console.log('bg: ', label.color, 'color: ', fontColor);
+      return { 'background-color': `#${bg}`, 'color': `rgb(${fontColor[0]}, ${fontColor[1]}, ${fontColor[2]})` };
     },
   },
 };
