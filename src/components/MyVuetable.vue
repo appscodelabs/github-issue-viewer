@@ -393,7 +393,6 @@ export default {
       };
       const bg = label.color;
       const fontColor = hexToLuma(bg);
-      console.log('bg: ', label.color, 'color: ', fontColor);
       return { 'background-color': `#${bg}`, 'color': `rgb(${fontColor[0]}, ${fontColor[1]}, ${fontColor[2]})` };
     },
   },
