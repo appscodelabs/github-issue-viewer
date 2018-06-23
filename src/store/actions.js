@@ -248,11 +248,61 @@ const getRepoIssues = ({ state, dispatch }) => {
   }
 };
 
+/* eslint-disable */
+const cleanupIssuesClickedTimestamp = ({ state }) => {
+  const allIssuesHtmlUrl = {};
+  const issues = state.issues;
+  const len = issues.length;
+  for (let i = 0; i < len; i += 1) {
+    allIssuesHtmlUrl[issues[i].htmlUrl] = true;
+  }
+
+  const idb = global.indexedDB ||
+              global.mozIndexedDB ||
+              global.webkitIndexedDB ||
+              global.msIndexedDB;
+  const open = idb.open('issues-clicked-timestamp', 2);
+  let db = '';
+  open.onupgradeneeded = function a() {
+    db = open.result;
+    db.createObjectStore('issue', { autoIncrement: true });
+  };
+
+  open.onsuccess = function openSuccess() {
+    db = open.result;
+
+    const tx = db.transaction('issue', 'readwrite');
+    const store = tx.objectStore('issue');
+    const allIssuesTimestamps = store.getAllKeys();
+
+    allIssuesTimestamps.onsuccess = function allIssuesTimestampsSuccess() {
+      const allTimestamps = allIssuesTimestamps.result;
+      const len = allTimestamps.length;
+      for (let ii = 0; ii < len; ii += 1) {
+        if (!allIssuesHtmlUrl[allTimestamps[ii]]) {
+          store.delete(allTimestamps[ii]);
+        }
+      }
+    };
+    allIssuesTimestamps.onerror = function getClickedTimestampError(e) {
+      console.log('error: ', e);
+    };
+
+    tx.oncomplete = function c() {
+      db.close();
+    };
+  };
+};
+
 const issuesUpdateTimer = ({ dispatch }) => {
   /* eslint-disable */
   setInterval(function timer() {
     dispatch('getRepoIssues');
   }, 10 * 60 * 1000);
+
+  setInterval(function issuesClickedTimestampTimer() {
+    dispatch('cleanupIssuesClickedTimestamp');
+  }, (60 * 60 * 1000) + 700);
 };
 
 export default {
