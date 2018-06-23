@@ -110,7 +110,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       minify: true,
       stripPrefix: 'dist/',
       runtimeCaching: [{
-        urlPattern: /^https:\/\/fonts.googleapis.com\/css/,
+        urlPattern: /^https:/,
         // Use network first and cache as a fallback
         handler: 'networkFirst'
       }]
