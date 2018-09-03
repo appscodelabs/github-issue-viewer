@@ -257,13 +257,16 @@ export default {
 
             getClickedTimestamp.onsuccess = function getClickedTimestampSuccess() {
               const clickedTimestamp = getClickedTimestamp.result;
+              const elHref = document.querySelector(`a[href="${htmlUrl}"]`);
 
               if (clickedTimestamp) {
-                if (clickedTimestamp < updatedAt) {
-                  resolve('updated-later'); // add 'updated-later class'
-                  document.querySelector(`a[href="${htmlUrl}"]`).classList.add('updated-later');
-                } else {
-                  document.querySelector(`a[href="${htmlUrl}"]`).classList.remove('updated-later');
+                if (elHref) {
+                  if (clickedTimestamp < updatedAt) {
+                    resolve('updated-later'); // add 'updated-later class'
+                    elHref.classList.add('updated-later');
+                  } else {
+                    elHref.classList.remove('updated-later');
+                  }
                 }
               } else {
                 store.put(updatedAt, htmlUrl);
