@@ -28,6 +28,7 @@
 
           <filter-org></filter-org>
           <filter-time></filter-time>
+          <filter-type></filter-type>
           <filter-bar></filter-bar>
         </div>
     </form>
@@ -124,6 +125,7 @@ import GithubToken from './GithubToken';
 import FilterBar from './FilterBar';
 import FilterTime from './FilterTime';
 import FilterOrg from './FilterOrg';
+import FilterType from './FilterType';
 import VuetablePaginationBootstrap from './VuetablePaginationBootstrap';
 
 Vue.component('tags-input', VoerroTagsInput);
@@ -131,6 +133,7 @@ Vue.use(VueEvents);
 Vue.component('github-token', GithubToken);
 Vue.component('filter-bar', FilterBar);
 Vue.component('filter-time', FilterTime);
+Vue.component('filter-type', FilterType);
 Vue.component('filter-org', FilterOrg);
 
 export default {
@@ -162,6 +165,11 @@ export default {
         this.$store.dispatch('setFilterTime', query.time);
       } else {
         this.$store.dispatch('setFilterTime', '');
+      }
+      if (query.type) {
+        this.$store.dispatch('setFilterType', query.type);
+      } else {
+        this.$store.dispatch('setFilterType', '');
       }
     }
   },

@@ -28,6 +28,7 @@ export default new Vuex.Store({
     filterText: '',
     filterOrg: '',
     filterTime: '',
+    filterType: '',
   },
 
   getters,

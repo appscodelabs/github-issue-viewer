@@ -5,6 +5,7 @@ const getCheckboxSelectedIssues = state => state.checkboxSelectedIssues;
 const getFilterText = state => state.filterText;
 const getFilterOrg = state => state.filterOrg;
 const getFilterTime = state => state.filterTime;
+const getFilterType = state => state.filterType;
 const getGithubToken = state => state.githubToken;
 
 export default {
@@ -14,5 +15,6 @@ export default {
   getFilterText,
   getFilterOrg,
   getFilterTime,
+  getFilterType,
   getGithubToken,
 };

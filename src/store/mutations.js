@@ -45,6 +45,9 @@ const SET_FILTER_ORG = (state, filterOrg) => {
 const SET_FILTER_TIME = (state, filterTime) => {
   state.filterTime = filterTime;
 };
+const SET_FILTER_TYPE = (state, filterType) => {
+  state.filterType = filterType;
+};
 const UPDATE_FILTER_ISSUES = (state) => {
   let filteredIssues = ''; // [...state.issues]
   if (state.filterTime) {
@@ -100,6 +103,16 @@ const UPDATE_FILTER_ISSUES = (state) => {
       issue.number.search(regexp) >= 0 ||
       issue.repoName.search(regexp) >= 0);
   }
+
+  if (state.filterType) {
+    const type = state.filterType;
+    if (type === 'pr') {
+      filteredIssues = filteredIssues.filter(issue => issue.isPR);
+    } else {
+      filteredIssues = filteredIssues.filter(issue => !issue.isPR);
+    }
+  }
+
   state.filteredIssues = filteredIssues;
 };
 
@@ -115,5 +128,6 @@ export default {
   SET_FILTER_TEXT,
   SET_FILTER_ORG,
   SET_FILTER_TIME,
+  SET_FILTER_TYPE,
   UPDATE_FILTER_ISSUES,
 };

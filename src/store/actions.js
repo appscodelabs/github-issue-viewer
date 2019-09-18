@@ -233,6 +233,10 @@ const setFilterTime = ({ commit }, filterTime) => {
   commit('SET_FILTER_TIME', filterTime);
   commit('UPDATE_FILTER_ISSUES');
 };
+const setFilterType = ({ commit }, filterType) => {
+  commit('SET_FILTER_TYPE', filterType);
+  commit('UPDATE_FILTER_ISSUES');
+};
 const getRepoIssues = ({ state, dispatch }) => {
   const orgs = state.orgs && state.orgs.split(',');
 
@@ -319,6 +323,7 @@ export default {
   setFilterText,
   setFilterOrg,
   setFilterTime,
+  setFilterType,
   getRepoIssues,
   issuesUpdateTimer,
 };
