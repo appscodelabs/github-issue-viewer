@@ -53,21 +53,22 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
     for (let i = 0; i < issueLen; i += 1) {
       const issue = issu[i];
 
-      const newIssue = Object.assign({
-        orgName,
-        repoName,
-      },
-      {
-        id: issue.title,
-        title: issue.title,
-        labels: issue.labels,
-        htmlUrl: issue.html_url,
-        number: issue.number.toString(),
-        createdAt: getDayDiff({ createdAt: issue.created_at }),
-        timestamp: moment(issue.created_at).valueOf(),
-        updatedAt: moment(issue.updated_at).valueOf(),
-        isPR: issue.html_url.search('/pull/') >= 0,
-      });
+      const newIssue = Object.assign(
+        {
+          orgName,
+          repoName,
+        },
+        {
+          id: issue.title,
+          title: issue.title,
+          labels: issue.labels,
+          htmlUrl: issue.html_url,
+          number: issue.number.toString(),
+          createdAt: getDayDiff({ createdAt: issue.created_at }),
+          timestamp: moment(issue.created_at).valueOf(),
+          updatedAt: moment(issue.updated_at).valueOf(),
+          isPR: issue.html_url.search('/pull/') >= 0,
+        });
 
       /* eslint-disable no-param-reassign */
       if (!whichArray && !state.issueUrlUnique[issue.html_url]) {
@@ -99,16 +100,19 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
   const needToUpdate = !issuesLastUpdated || (issuesLastUpdated - moment().subtract(10, 'minutes')) < 0;
   if (needToUpdate) {
     const idb = global.indexedDB ||
-    global.mozIndexedDB ||
-    global.webkitIndexedDB ||
-    global.msIndexedDB;
+      global.mozIndexedDB ||
+      global.webkitIndexedDB ||
+      global.msIndexedDB;
 
     // const apiUrl = 'https://api.github.com/repos/sajibcse68/delete-it/issues';
-    const apiUrl = state.githubToken ?
-      `https://api.github.com/repos/${orgName}/${repoName}/issues?access_token=${state.githubToken}` :
-      `https://api.github.com/repos/${orgName}/${repoName}/issues`;
+    const apiUrl = `https://api.github.com/repos/${orgName}/${repoName}/issues`;
+    const apiHeaders = state.githubToken ? {
+      headers: {
+        Authorization: `token ${state.githubToken}`,
+      },
+    } : {};
 
-    const resp = await axios.get(apiUrl);
+    const resp = await axios.get(apiUrl, apiHeaders);
     /*
     const resp = {
       data: [
@@ -154,9 +158,9 @@ const getIssues = async ({ dispatch, state }, { orgName, repoName }) => {
     };
   } else {
     const idb = global.indexedDB ||
-                global.mozIndexedDB ||
-                global.webkitIndexedDB ||
-                global.msIndexedDB;
+      global.mozIndexedDB ||
+      global.webkitIndexedDB ||
+      global.msIndexedDB;
 
     const open = idb.open('issues-db', 1);
     let db = '';
@@ -185,10 +189,14 @@ const getRepos = async ({ commit, state, dispatch }, orgName) => {
   const repoNamesLastUpdated = localStorage.getItem(`${orgName}RepoNamesLastUpdated`);
   const needToUpdate = !repoNamesLastUpdated || (repoNamesLastUpdated - moment().subtract(10, 'minutes').valueOf()) < 0;
   if (needToUpdate) {
-    const apiUrl = state.githubToken ?
-      `https://api.github.com/orgs/${orgName}/repos?access_token=${state.githubToken}` :
-      `https://api.github.com/orgs/${orgName}/repos`;
-    const resp = await axios.get(apiUrl);
+    const apiUrl = `https://api.github.com/orgs/${orgName}/repos`;
+    const apiHeaders = state.githubToken ? {
+      headers: {
+        Authorization: `token ${state.githubToken}`,
+      },
+    } : {};
+
+    const resp = await axios.get(apiUrl, apiHeaders);
     repoNames = resp.data.map(repo => repo.name);
     localStorage.setItem(orgName, JSON.stringify(repoNames));
     localStorage.setItem(`${orgName}RepoNamesLastUpdated`, moment().valueOf());
@@ -262,9 +270,9 @@ const cleanupIssuesClickedTimestamp = ({ state }) => {
   }
 
   const idb = global.indexedDB ||
-              global.mozIndexedDB ||
-              global.webkitIndexedDB ||
-              global.msIndexedDB;
+    global.mozIndexedDB ||
+    global.webkitIndexedDB ||
+    global.msIndexedDB;
   const open = idb.open('issues-clicked-timestamp', 2);
   let db = '';
   open.onupgradeneeded = function a() {
