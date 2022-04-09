@@ -19,7 +19,7 @@
     "bootstrap": "^4.1.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
-    "moment": "^2.22.1",
+    "moment": "^2.29.2",
     "semantic-ui-css": "^2.3.1",
     "vue": "^2.5.2",
     "vue-events": "^3.1.0",
